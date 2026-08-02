@@ -1,12 +1,26 @@
-from ..config import settings
+import json
+from typing import Any, Dict
+from config import settings
 
 
 class Planner:
     def __init__(self, provider) -> None:
         self.provider = provider
 
-    def plan(self, goal):
+    def plan(self, goal) -> list[Dict[int, str]]:
         """Returns a Structured JSON for the given task"""
-        task = self.provider.chat(settings.PlannerPrompt.format(goal=goal))
-        cleaned_task = task.strip()
-        return cleaned_task
+        task: Dict[str, Any] = self.provider.chat(
+            settings.PlannerPrompt.format(goal=goal)
+        )
+        print(task)
+        json_task = json.loads(str(task))
+        print(
+            [
+                {idx: action["action"]}
+                for idx, action in enumerate(json_task["steps"], start=1)
+            ]
+        )
+        return [
+            {idx: action["action"]}
+            for idx, action in enumerate(json_task["steps"], start=1)
+        ]

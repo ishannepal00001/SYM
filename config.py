@@ -11,7 +11,7 @@ class Config:
     Rules:
 - Output ONLY valid JSON. No explanation, no preamble, no markdown code fences.
 - Use this exact structure:
-{"steps": [{"step": 1, "action": "..."}, {"step": 2, "action": "..."}]}
+{{"steps": [{{"step": 1, "action": "..."}}, {{"step": 2, "action": "..."}}]}}
 - Each "action" should be a single, concrete, self-contained instruction — specific enough that it could be executed on its own without seeing other steps.
 - Keep the step count minimal — only as many steps as are actually necessary to reach the goal.
 - Do not include steps for things that don't require action (e.g. "understand the goal").

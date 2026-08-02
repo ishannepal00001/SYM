@@ -20,14 +20,14 @@ class GroqClient:
         for chunk in completion:
             print(chunk.choices[0].delta.content or "", end="")
 
-    def general_chat(self):
+    def chat(self, message):
         completion = self.client.chat.completions.create(
             model="openai/gpt-oss-120b",
-            messages=[{"role": "user", "content": "Wake Up daddy's home!"}],
+            messages=[{"role": "user", "content": str(message)}],
             temperature=1,
             max_completion_tokens=2048,
             top_p=1,
             reasoning_effort="medium",
             stop=None,
         )
-        print(completion.choices[0].message.content)
+        return completion.choices[0].message.content
