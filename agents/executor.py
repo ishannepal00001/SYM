@@ -13,4 +13,5 @@ class Executor:
                 settings.ExcecutorPrompt.format(completed=completed, task=task)
             )
             result.append(output)
+            print(output)
             yield output
