@@ -1,8 +1,11 @@
+from typing import Any, Dict
+
+
 class APIManager:
-    def __init__(self, api_Keys: list[str]):
+    def __init__(self, api_keys: list[Dict[str, Any]]):
         self._index = 0
-        self._API = api_Keys
-        self.blacklist = dict()
+        self._API = api_keys
+        self._blacklist: Dict[str, Any] = dict()
 
     def blacklist(self):
         None

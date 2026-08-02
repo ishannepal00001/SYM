@@ -1,10 +1,6 @@
-from config import settings
-from providers.groq import GroqClient as Gclient
+from config import Config
 from dotenv import load_dotenv
 
 load_dotenv()
-client = Gclient(api_key=settings.GROQ_KEY_1)
-print(repr(settings.GROQ_KEY_1))
 
-
-client.stream_chat()
+print([{k: v} for k, v in vars(Config).items() if not k.startswith("_")])
