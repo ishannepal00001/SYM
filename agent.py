@@ -9,5 +9,5 @@ class SYMAgent:
 
     def agent_loop(self, goal: str):
         PLAN_DAG = self.planner.plan(goal=goal)
-        for plan in self.executor.execute(PLAN_DAG):
-            print(plan)
+        output = self.executor.execute(PLAN_DAG)
+        print(output)

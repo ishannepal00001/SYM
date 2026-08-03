@@ -14,12 +14,7 @@ class Planner:
         )
         print(task)
         json_task = json.loads(str(task))
-        print(
-            [
-                {idx: action["action"]}
-                for idx, action in enumerate(json_task["steps"], start=1)
-            ]
-        )
+
         return [
             {idx: action["action"]}
             for idx, action in enumerate(json_task["steps"], start=1)

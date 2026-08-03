@@ -1,3 +1,4 @@
+from typing import Any, Dict
 from config import settings
 
 
@@ -5,7 +6,7 @@ class Executor:
     def __init__(self, provider) -> None:
         self.provider = provider
 
-    def execute(self, tasks: list[str]):
+    def execute(self, tasks: list[Dict[int, Any]]):
         completed = []
         result = []
         for task in tasks:
@@ -13,5 +14,4 @@ class Executor:
                 settings.ExcecutorPrompt.format(completed=completed, task=task)
             )
             result.append(output)
-            print(output)
-            yield output
+        return result
