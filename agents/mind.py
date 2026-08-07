@@ -3,7 +3,7 @@ from typing import Any, Dict
 from config import settings
 
 
-class Planner:
+class Mind:
     def __init__(self, provider) -> None:
         self.provider = provider
 
@@ -12,9 +12,7 @@ class Planner:
         task: Dict[str, Any] = self.provider.chat(
             settings.PlannerPrompt.format(goal=goal)
         )
-        print(task)
         json_task = json.loads(str(task))
-
         return [
             {idx: action["action"]}
             for idx, action in enumerate(json_task["steps"], start=1)

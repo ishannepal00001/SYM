@@ -2,7 +2,7 @@ from typing import Any, Dict
 from config import settings
 
 
-class Executor:
+class Hands:
     def __init__(self, provider) -> None:
         self.provider = provider
 

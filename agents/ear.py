@@ -1,0 +1,2 @@
+class Ear:
+    pass
