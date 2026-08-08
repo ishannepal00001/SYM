@@ -1,6 +1,6 @@
 from typing import List
 from openrouter.components import model
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, functional_serializers, model_validator
 
 
 class Tasks(BaseModel):
@@ -25,15 +25,28 @@ class TasksRepo(BaseModel):
 
     @model_validator(mode="after")
     def check_no_cycles(self):
-        depedency_repo = {}
-        for task in self.tasks:
+        repo = {task.task_title: task for task in self.tasks}
+        marked = set()
+        unmarked = set()
+
+        def visit(task):
+            if task.task_title in marked:
+                return
+            if task.task_title in unmarked:
+                raise ValueError(
+                    "Cycling dependeny found: {title}".format(title=task.task_title)
+                )
+            unmarked.add(task.title)
             for dependency_title in task.dependency:
-                task_title = depedency_repo.get(dependency_title)
-                if dependency_title == task_title:
-                    raise ValueError(
-                        "Cycling dependency found for {task}".format(task=task_title)
-                    )
-                depedency_repo[dependency_title] = task.task_title
+                dep_task = repo.get(dependency_title)
+                if dep_task is not None:
+                    visit(dep_task)
+            marked.add(task.task_title)
+            unmarked.remove(task.title)
+
+        for task in self.tasks:
+            visit(task)
+
         return self
 
 
@@ -65,5 +78,31 @@ class DAG(BaseModel):
             for dependency_id in step.dependency:
                 if step.id == dependency_id:
                     raise ValueError("Self dependency detected")
+
+        return self
+
+    @model_validator(mode="after")
+    def check_no_cycles(self):
+        repo = {step.id: step for step in self.steps}
+        marked = set()
+        unmarked = set()
+
+        def visit(step):
+            if step.id in marked:
+                return
+            if step.id in unmarked:
+                raise ValueError(
+                    "Cycling dependeny found: {title}".format(title=step.id)
+                )
+            unmarked.add(step.id)
+            for dependency_id in step.dependency:
+                dep_task = repo.get(dependency_id)
+                if dep_task is not None:
+                    visit(dep_task)
+            marked.add(step.id)
+            unmarked.remove(step.id)
+
+        for task in self.steps:
+            visit(task)
 
         return self
