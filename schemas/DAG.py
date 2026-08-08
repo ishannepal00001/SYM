@@ -3,35 +3,38 @@ from openrouter.components import model
 from pydantic import BaseModel, model_validator
 
 
-def get_keys(repo):
-    """
-    Function that extracts a unique identifier from either a list or a dictionary.
-    Params: repo
-    """
-    pass
-
-
-def get_deps(repo):
-    """
-    Function that extracts dependency from the unique identifier provided in the repo.
-    Params: repo
-    """
-    pass
-
-
-def not_self_dependent(self):
-    for step in self.steps:
-        for dependency_id in step.dependency:
-            if step.id == dependency_id:
-                raise ValueError("Self dependency detected")
-    return self
-
-
 class Tasks(BaseModel):
     task_title: str
     task_description: str
     dependency: List[str]
     tool_description: str
+
+
+class TasksRepo(BaseModel):
+    tasks: List[Tasks]
+
+    @model_validator(mode="after")
+    def not_self_dependent(self):
+        for task in self.tasks:
+            for dependency_title in task.dependency:
+                if dependency_title == task.task_title:
+                    raise ValueError(
+                        "Self dependency found in {task}".format(task=task.task_title)
+                    )
+        return self
+
+    @model_validator(mode="after")
+    def check_no_cycles(self):
+        depedency_repo = {}
+        for task in self.tasks:
+            for dependency_title in task.dependency:
+                task_title = depedency_repo.get(dependency_title)
+                if dependency_title == task_title:
+                    raise ValueError(
+                        "Cycling dependency found for {task}".format(task=task_title)
+                    )
+                depedency_repo[dependency_title] = task.task_title
+        return self
 
 
 class Step(Tasks):
@@ -54,4 +57,13 @@ class DAG(BaseModel):
             if step.id in steps:
                 raise ValueError("Found duplicate ID {id}".format(id=step.id))
             steps.append(step.id)
+        return self
+
+    @model_validator(mode="after")
+    def not_self_dependent(self):
+        for step in self.steps:
+            for dependency_id in step.dependency:
+                if step.id == dependency_id:
+                    raise ValueError("Self dependency detected")
+
         return self
