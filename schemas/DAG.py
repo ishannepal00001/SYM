@@ -1,6 +1,5 @@
 from typing import List
-from openrouter.components import model
-from pydantic import BaseModel, functional_serializers, model_validator
+from pydantic import BaseModel, model_validator
 
 
 class Tasks(BaseModel):
@@ -36,13 +35,13 @@ class TasksRepo(BaseModel):
                 raise ValueError(
                     "Cycling dependeny found: {title}".format(title=task.task_title)
                 )
-            unmarked.add(task.title)
+            unmarked.add(task.task_title)
             for dependency_title in task.dependency:
                 dep_task = repo.get(dependency_title)
                 if dep_task is not None:
                     visit(dep_task)
             marked.add(task.task_title)
-            unmarked.remove(task.title)
+            unmarked.remove(task.task_title)
 
         for task in self.tasks:
             visit(task)

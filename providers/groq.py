@@ -1,4 +1,5 @@
-from groq import Groq
+from typing import Literal
+from groq import Groq, Omit
 
 
 class GroqClient:
@@ -20,14 +21,20 @@ class GroqClient:
         for chunk in completion:
             print(chunk.choices[0].delta.content or "", end="")
 
-    def chat(self, message):
+    def chat(
+        self,
+        message,
+        temperature=1,
+        stop: str | None = None,
+        reasoning_effort: Literal["low", "medium", "high"] = "medium",
+    ):
         completion = self.client.chat.completions.create(
             model="openai/gpt-oss-120b",
             messages=[{"role": "user", "content": str(message)}],
-            temperature=1,
+            temperature=temperature,
             max_completion_tokens=2048,
             top_p=1,
-            reasoning_effort="medium",
-            stop=None,
+            reasoning_effort=reasoning_effort,
+            stop=stop,
         )
         return completion.choices[0].message.content
