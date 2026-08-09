@@ -8,4 +8,6 @@ client = GroqClient(settings.GROQ_KEY_1)
 # print([{k: v} for k, v in vars(Config).items() if not k.startswith("_")])
 
 agent = SYMAgent(client)
-agent.agent_loop("Explain the  cons of masturbation.")
+agent.agent_loop(
+    "Fetch me the react docs and explain about useEffect() from the official docs"
+)

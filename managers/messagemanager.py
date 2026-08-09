@@ -20,3 +20,6 @@ class MessageManager:
 
     def add_user(self, prompt: str):
         self.messages.append({"role": "user", "content": prompt.lower()})
+
+    def get_history(self):
+        return self.messages

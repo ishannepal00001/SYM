@@ -17,4 +17,7 @@ class SYMAgent:
             agent="planner", prompt=settings.PlannerPrompt, content=PLAN_DAG
         )
         output = self.executor.execute(PLAN_DAG)
+        self.messageManger.add_agent(
+            agent="executor", prompt=settings.ExcecutorPrompt, content=output
+        )
         print(output)
