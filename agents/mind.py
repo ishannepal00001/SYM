@@ -1,6 +1,7 @@
 import json
 from typing import Any, Dict
 from config import settings
+from schemas.DAG import TasksRepo
 
 
 class Mind:
@@ -12,6 +13,6 @@ class Mind:
         task: Dict[str, Any] = self.provider.chat(
             settings.PlannerPrompt.format(goal=goal)
         )
-        json_task = json.loads(str(task))
-        print(json_task)
-        return json_task
+        dag_output = TasksRepo(**task)
+        # print(f"This is the dag ouptut {dag_output}")
+        return dag_output

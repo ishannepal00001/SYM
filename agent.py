@@ -13,11 +13,11 @@ class SYMAgent:
     def agent_loop(self, goal: str):
         self.messageManger.add_user(prompt=goal)
         PLAN_DAG = self.planner.plan(goal=goal)
+        print(PLAN_DAG)
         self.messageManger.add_agent(
             agent="planner", prompt=settings.PlannerPrompt, content=PLAN_DAG
         )
-        output = self.executor.execute(PLAN_DAG)
-        self.messageManger.add_agent(
-            agent="executor", prompt=settings.ExcecutorPrompt, content=output
-        )
-        print(output)
+        # output = self.executor.execute(PLAN_DAG)
+        # self.messageManger.add_agent(
+        #     agent="executor", prompt=settings.ExcecutorPrompt, content=output
+        # )
