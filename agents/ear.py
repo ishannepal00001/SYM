@@ -20,7 +20,7 @@ class Ear:
 
     def _callback(self, indata):
         rms = calculate_rms(indata)
-        if rms <= 0.03:
+        if rms <= 0.35:
             self.silence_counter -= 1
 
         elif self.silence_counter == 0:
@@ -32,11 +32,10 @@ class Ear:
 
     def listen(self):
         try:
-            resampled_rec = ls.resample(
-                np.concatenate(self.stream), orig_sr=self.fs, target_sr=16000
-            )
+            combined = np.concatenate(self.stream)
+            mono = np.mean(combined, axis=1)
             segs, info = self.net.transcribe(
-                audio=np.mean(resampled_rec, axis=1),
+                audio=ls.resample(mono, orig_sr=self.fs, target_sr=16000),
                 language="en",
                 condition_on_previous_text=False,
             )
