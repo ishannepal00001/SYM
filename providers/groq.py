@@ -1,6 +1,6 @@
 import json
 from typing import Literal
-from groq import Groq, Omit
+from groq import Groq
 
 
 class GroqClient:
@@ -38,5 +38,5 @@ class GroqClient:
             reasoning_effort=reasoning_effort,
             stop=stop,
         )
-        json_response = json.loads(completion.choices[0].message.content)
-        return json_response
+        output = completion.choices[0].message.content
+        return output

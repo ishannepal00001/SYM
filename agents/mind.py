@@ -13,6 +13,8 @@ class Mind:
         task: Dict[str, Any] = self.provider.chat(
             settings.PlannerPrompt.format(goal=goal)
         )
+        print(task)
         dag_output = TasksRepo(**task)
-        # print(f"This is the dag ouptut {dag_output}")
+        print(dag_output)
+        print(f"This is the dag ouptut {dag_output}")
         return dag_output
