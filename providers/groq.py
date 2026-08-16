@@ -27,15 +27,14 @@ class GroqClient:
         message,
         temperature=1,
         stop: str | None = None,
-        reasoning_effort: Literal["low", "medium", "high"] = "medium",
+        # reasoning_effort: Literal["low", "medium", "high"] = "medium",
     ):
         completion = self.client.chat.completions.create(
-            model="openai/gpt-oss-120b",
+            model="llama-3.3-70b-versatile",
             messages=[{"role": "user", "content": str(message)}],
             temperature=temperature,
             max_completion_tokens=2048,
             top_p=1,
-            reasoning_effort=reasoning_effort,
             stop=stop,
         )
         output = completion.choices[0].message.content

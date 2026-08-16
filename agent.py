@@ -1,8 +1,8 @@
+from agents.mouth import Mouth
 from agents.throat import Thorat
 from agents.mind import Mind
 from agents.hands import Hands
 from managers.messagemanager import MessageManager
-from config import settings
 from agents.ear import Ear
 
 
@@ -12,6 +12,7 @@ class SYMAgent:
         self.executor = Hands(provider)
         self.ear = Ear()
         self.throat = Thorat(provider)
+        self.mouth = Mouth()
         self.ready = []
         self.pending = {}
         self.messageManger = MessageManager()
@@ -22,6 +23,8 @@ class SYMAgent:
         self.messageManger.add_user(prompt=str(output))
         output = self.throat.talk(topic=output)
         print(output)
+        self.mouth.speak(output, voice="en_GB-northern_english_male-medium.onnx")
+
         # PLAN_DAG = self.planner.plan(goal=output)
         # print(PLAN_DAG)
         # self.messageManger.add_agent(
