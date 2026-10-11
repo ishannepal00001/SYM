@@ -1,7 +1,13 @@
 [project]
 name = "sym"
 version = "0.1.0"
-description = "Add your description here"
+description = "A personal AI assistant that runs errands from the terminal"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "textual>=8.2.8",
+]
+
+[build-system]
+requires = ["uv_build>=0.11.16,<0.12"]
+build-backend = "uv_build"

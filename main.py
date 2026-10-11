@@ -1,6 +1,4 @@
-def main():
-    print("Hello from sym!")
-
+from sym.ui import main
 
 if __name__ == "__main__":
     main()
